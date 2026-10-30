@@ -13,6 +13,7 @@ import { RoomLight } from './RoomLight'
 export interface Stage {
   camZ: number
   focusZ: number
+  focusY: number
   parallax: Vector3
   rayOrigin: Vector3
   rayDir: Vector3
@@ -39,6 +40,11 @@ const FOV = 30
 const BASE_CAMERA_Z = 5.4
 const FIT_WIDTH = 4.5 // world width kept in frame on narrower screens
 const FOCUS_DISTANCE = 3.7 // a lifted cloth hangs this far from the lens
+const FOCUS_Y = 0.69
+// Portrait phones: one cloth fills the frame with its neighbours peeking in, and a
+// lifted cloth rises into the top half, clear of the sheet that slides up beneath it.
+const PORTRAIT = { below: 0.8, fitWidth: 1.45, minCamZ: 5.9, focusDistance: 5.6, focusY: 1.25 }
+const COMPACT_QUERY = '(max-width: 767px)'
 const LOOK_Y = -0.06
 const WALL_Z = -1
 const FLOOR_Y = -1.34 // where the CSS floor meets the wall, at the wall's depth
@@ -52,6 +58,7 @@ export default function RailScene(props: RailSceneProps) {
     () => ({
       camZ: BASE_CAMERA_Z,
       focusZ: BASE_CAMERA_Z - FOCUS_DISTANCE,
+      focusY: FOCUS_Y,
       parallax: new Vector3(),
       rayOrigin: new Vector3(),
       rayDir: new Vector3(0, 0, -1),
@@ -62,7 +69,7 @@ export default function RailScene(props: RailSceneProps) {
   return (
     <Canvas
       shadows="percentage"
-      dpr={[1, 1.75]}
+      dpr={[1, matchMedia(COMPACT_QUERY).matches ? 1.5 : 1.75]} // phones trade a little sharpness for frame rate
       camera={{ fov: FOV, near: 0.1, far: 40, position: [0, 0, BASE_CAMERA_Z] }}
       gl={{ antialias: true, alpha: true }}
       onCreated={({ gl }) => {
@@ -133,9 +140,11 @@ function RailDriver({ motion, target, reducedMotion }: { motion: Motion; target:
 function CameraRig({ stage, motion, focused }: { stage: Stage; motion: Motion; focused: boolean }) {
   useFrame(({ camera, size, pointer }, dt) => {
     const aspect = size.width / size.height
-    const fitZ = FIT_WIDTH / (2 * Math.tan(MathUtils.degToRad(FOV / 2)) * aspect)
-    stage.camZ = Math.max(BASE_CAMERA_Z, fitZ)
-    stage.focusZ = stage.camZ - FOCUS_DISTANCE
+    const portrait = aspect < PORTRAIT.below
+    const fitZ = (portrait ? PORTRAIT.fitWidth : FIT_WIDTH) / (2 * Math.tan(MathUtils.degToRad(FOV / 2)) * aspect)
+    stage.camZ = Math.max(BASE_CAMERA_Z, fitZ, portrait ? PORTRAIT.minCamZ : 0)
+    stage.focusZ = stage.camZ - (portrait ? PORTRAIT.focusDistance : FOCUS_DISTANCE)
+    stage.focusY = portrait ? PORTRAIT.focusY : FOCUS_Y
 
     // a lifted cloth is close to the lens, so drift less while it is in focus
     const reach = motion.inside ? (focused ? 0.3 : 1) : 0

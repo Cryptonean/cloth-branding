@@ -3,6 +3,8 @@ import { settleTarget, type Motion } from './railMath'
 
 export const DRAG_SLOP = 6 // px before a press becomes a drag
 const ITEM_WIDTH = 0.17 // share of the stage width that moves the rail one cloth
+const ITEM_WIDTH_PHONE = 0.5 // on a phone one cloth fills the frame, so a swipe is wider
+const PHONE_WIDTH = 768
 const WHEEL_GAIN = 0.6
 const WHEEL_SETTLE_MS = 140
 const STALE_FLING_MS = 80 // a hand that stopped before letting go carries no momentum
@@ -31,7 +33,7 @@ export function useRailGestures(
     let velocity = 0
     let isDrag = false
     let wheelTimer = 0
-    const itemWidth = () => Math.max(1, stage.clientWidth * ITEM_WIDTH)
+    const itemWidth = () => Math.max(1, stage.clientWidth * (stage.clientWidth < PHONE_WIDTH ? ITEM_WIDTH_PHONE : ITEM_WIDTH))
 
     const down = (e: PointerEvent) => {
       if (e.button !== 0) return

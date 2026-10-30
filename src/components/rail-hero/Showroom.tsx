@@ -142,7 +142,8 @@ export function Showroom({ reducedMotion }: ShowroomProps) {
         </p>
         <div className="rail-hero__center">
           <p className="rail-hero__hint" data-hidden={touched}>
-            Drag to browse <span aria-hidden="true">·</span> Click a cloth to feel it
+            <span className="rail-hero__hint-desktop">Drag to browse · Click a cloth to feel it</span>
+            <span className="rail-hero__hint-touch">Swipe to browse · Tap a cloth</span>
           </p>
           <SunDial value={daylight} label={lightLabel(daylight)} note={clockNote} onChange={changeLight} />
         </div>

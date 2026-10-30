@@ -38,7 +38,6 @@ class StageBoundary extends Component<StageBoundaryProps, { failed: boolean }> {
 }
 
 export function RailHero() {
-  const isNarrow = useMediaQuery('(max-width: 767px)')
   const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
   const [hasWebGL] = useState(supportsWebGL2)
 
@@ -80,7 +79,7 @@ export function RailHero() {
         Five of the rarest natural fibres on earth. Woven by hand, sold by the metre.
       </p>
 
-      {isNarrow || !hasWebGL ? (
+      {!hasWebGL ? (
         <MobileRail cloths={CLOTHS} />
       ) : (
         <StageBoundary fallback={<MobileRail cloths={CLOTHS} />}>

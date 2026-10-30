@@ -35,7 +35,6 @@ const CLIP_Y = BAR_Y - 0.035
 const CLOTH_TOP = -0.158 // where the cloth leaves the clips
 const SETTLE_STEPS = 90
 
-const FOCUS_Y = 0.69
 const LIFT_ARC = 0.14 // lifts up off the rail before it comes forward
 const LIFT_SECONDS = 1.25 // unhurried: a cloth this rare is handled slowly
 const INERTIA = 0.75 // the cloth trails three quarters of the hanger's travel
@@ -222,7 +221,7 @@ export function HangerItem({
     const wrapped = live.primed && Math.abs(slot - live.prevSlot) > count / 2
     live.prevSlot = slot
     const isActive = focused && mod(target, count) === index
-    const yaw = placePivot(live, slot, isActive, focused, stage.focusZ, dt, reducedMotion)
+    const yaw = placePivot(live, slot, isActive, focused, stage, dt, reducedMotion)
     if (!live.primed || wrapped) {
       live.prevPivot.copy(live.pivot)
       live.vel.set(0, 0, 0)
@@ -308,7 +307,7 @@ function placePivot(
   slot: number,
   isActive: boolean,
   focused: boolean,
-  focusZ: number,
+  { focusY, focusZ }: Stage,
   dt: number,
   reducedMotion: boolean,
 ): number {
@@ -318,7 +317,7 @@ function placePivot(
   const e = easeInOutSine(live.lift)
   live.pivot.set(
     MathUtils.lerp(pose.x, 0, e),
-    MathUtils.lerp(RAIL_Y, FOCUS_Y, e) + Math.sin(Math.PI * e) * LIFT_ARC,
+    MathUtils.lerp(RAIL_Y, focusY, e) + Math.sin(Math.PI * e) * LIFT_ARC,
     MathUtils.lerp(pose.z, focusZ, e),
   )
   return MathUtils.lerp(pose.angle, 0, e)
