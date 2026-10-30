@@ -1,0 +1,41 @@
+:root {
+  /* a limewashed atelier: warm stone, sunlight, brass */
+  /* a shade deeper than paper, so the sunlight has somewhere to land */
+  --color-wall: #e2d9cb;
+  --color-wall-top: #e9e1d4;
+  --color-wall-base: #d6ccbc;
+  --color-floor-top: #d4c9b7;
+  --color-floor: #c9bca8;
+  --color-sun: rgb(255 238 208 / 0.6);
+  --color-ink: #1d1915;
+  --color-ink-soft: #6b6157;
+  --color-ink-faint: rgb(29 25 21 / 0.14);
+  --color-brass: #a07a44;
+  --color-paper: #f7f2ea;
+  --color-glass: rgb(247 242 234 / 0.68);
+  /* the light of the hour; the sun dial rewrites these on the hero */
+  --shaft-color: rgb(255 221 168);
+  --shaft-opacity: 1;
+  --vignette: 18%;
+
+  --font-display: 'Instrument Serif', 'Iowan Old Style', 'Times New Roman', serif;
+  --font-body: 'Hanken Grotesk', 'Helvetica Neue', Arial, sans-serif;
+
+  /* the hero type is sized by height: the 3D rail scales with the viewport height */
+  --text-hero: clamp(4.5rem, min(13.5vw, 22vh), 16rem);
+  --text-name: clamp(2.6rem, 1.4rem + 2.4vw, 4.4rem);
+  --text-title: clamp(1.6rem, 1.2rem + 0.9vw, 2.25rem);
+  --text-base: clamp(0.94rem, 0.9rem + 0.15vw, 1.02rem);
+  --text-small: 0.8125rem;
+  --text-micro: 0.6875rem;
+  --tracking-caps: 0.16em;
+
+  --gutter: clamp(16px, 3.2vw, 48px);
+  --radius-pill: 999px;
+
+  --duration-fast: 180ms;
+  --duration-normal: 420ms;
+  --duration-slow: 900ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
